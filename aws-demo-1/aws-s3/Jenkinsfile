@@ -8,29 +8,34 @@ pipeline {
         }
         stage('Create s3 bucket') {
             steps {
+                script {
                 withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'Jenkins-aws-cred', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                 aws s3 mb s3://Cloud-House-bucket-1
                 sleep 60
+                
 }
-
+                }
             }
         }
         stage('List s3 bucket for confirmation') {
             steps {
+                script {
                 withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'Jenkins-aws-cred', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                 aws s3 ls
                 sleep 60
 }
-
+                }
             }
         }
 
         stage('Delete s3 bucket') {
             steps {
+                script {
                 withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'Jenkins-aws-cred', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                 aws s3 rb s3://Cloud-House-bucket-1
                 sleep 60
 }
+                }
             }
         }
     }
