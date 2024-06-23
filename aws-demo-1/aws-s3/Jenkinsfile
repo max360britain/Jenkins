@@ -11,7 +11,7 @@ pipeline {
                 script {
                 withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'Jenkins-aws-cred', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                 sh ''' 
-                aws s3 mb s3://mpicksonbucket
+                aws s3 mb s3://mpicksonbucket --region us-east-1
                 sleep 60
                 '''
                 
@@ -37,7 +37,7 @@ pipeline {
                 script {
                 withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'Jenkins-aws-cred', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                 sh '''
-                aws s3 rb s3://mpicksonbucket
+                aws s3 rb s3://mpicksonbucket --region us-east-1
                 sleep 60
                 '''
 }
