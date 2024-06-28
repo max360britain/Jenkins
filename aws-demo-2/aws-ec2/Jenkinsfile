@@ -20,7 +20,7 @@ pipeline {
                 }
             }
         }
-        stage('List all ec2 Instance') {
+        /*stage('List all ec2 Instance') {
             steps {
                 script {
                 withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'Jenkins-aws-cred', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
@@ -45,13 +45,13 @@ pipeline {
                 }
             }
         }
-
+*/
         stage('Terminating ec2 instance') {
             steps {
                 script {
                 withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'Jenkins-aws-cred', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                 sh '''
-                aws ec2 terminate-instances i-020e38f20fd69846d --region us-east-1
+                aws ec2 terminate-instances --instance-ids i-020e38f20fd69846d i-0a121c063fab3c380 --region us-east-1
                 sleep 60
                 '''
 }
