@@ -1,1 +1,62 @@
 
+pipeline {
+    agent any
+    stages {
+        stage('Clone github repository') {
+            steps {
+                git branch: 'main', url: 'https://github.com/max360britain/Jenkins.git'
+            }
+        }
+        stage('Create s3 bucket') {
+            steps {
+                script {
+                withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'Jenkins-aws-cred', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                sh ''' 
+                aws ec2 run-instances --image-id ami-04b70fa74e45c391 --count 1 --instance-type t2.micro --key-name aws.pem --security-group-ids sg-00bcdb94bc8803cde --subnet-id subnet-04d1a2eee3d7029b1
+                sleep 60
+                '''
+                
+}
+                }
+            }
+        }
+        stage('List all ec2 Instance') {
+            steps {
+                script {
+                withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'Jenkins-aws-cred', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                sh'''
+                aws ec2 describe-instances
+                sleep 60
+                '''
+}
+                }
+            }
+        }
+
+        stage('List only t2.micro instance') {
+            steps {
+                script {
+                withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'Jenkins-aws-cred', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                sh '''
+                aws ec2 describe-instances --filters "Name=instance-type,Values=t2.micro" --query "Reservations[].Instances[].InstanceId"
+                sleep 60
+                '''
+}
+                }
+            }
+        }
+
+        stage('Terminating ec2 instance') {
+            steps {
+                script {
+                withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'Jenkins-aws-cred', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                sh '''
+                aws ec2 terminate-instances
+                sleep 60
+                '''
+}
+                }
+            }
+        }
+    }
+}
