@@ -12,7 +12,7 @@ pipeline {
                 script {
                 withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'Jenkins-aws-cred', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                 sh ''' 
-                aws ec2 run-instances --image-id ami-04b70fa74e45c3917 --count 1 --instance-type t2.micro --key-name GitActions_key.pem --security-group-ids sg-00bcdb94bc8803cde --subnet-id subnet-04d1a2eee3d7029b1 --region us-east-1
+                aws ec2 run-instances --image-id ami-04b70fa74e45c3917 --count 1 --instance-type t2.micro --key-name aws --security-group-ids sg-00bcdb94bc8803cde --subnet-id subnet-04d1a2eee3d7029b1 --region us-east-1
                 sleep 60
                 '''
                 
